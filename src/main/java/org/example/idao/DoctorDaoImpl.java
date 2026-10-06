@@ -7,6 +7,7 @@ import org.example.utils.DatabaseConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DoctorDaoImpl implements DoctorDao {
@@ -43,10 +44,30 @@ public class DoctorDaoImpl implements DoctorDao {
         return doctor;
     }
 
-//    @Override
-//    public List<Doctor> getDoctors() {
-//        return List.of();
-//    }
+    @Override
+    public List<Doctor> getDoctors() {
+        List<Doctor> lista = new ArrayList<>();
+
+        String query = "select * from doctors";
+        PreparedStatement ps = null;
+        Doctor doctor = null;
+        try {
+            ps = DatabaseConnection.getInstance().getConnection().prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                doctor = new Doctor(rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("lastname"),
+                        rs.getString("dni"),
+                        rs.getDouble("salary"),
+                        rs.getString("speciality"));
+                lista.add(doctor);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
 
     @Override
     public boolean update(Doctor doctor) {
@@ -77,6 +98,6 @@ public class DoctorDaoImpl implements DoctorDao {
     }
 
     private boolean doctorExists(int id) {
-        return false;
+        return getDoctor(id) != null;
     }
 }
