@@ -13,12 +13,38 @@ import java.util.List;
 public class DoctorDaoImpl implements DoctorDao {
     @Override
     public int add(Doctor doctor) {
-        return 0;
+        String query = "insert doctors id=?, name=?, lastname=?, dni=?, salary=?, speciality=?";
+        PreparedStatement ps;
+        int rs = 0;
+        try {
+            ps = DatabaseConnection.getInstance().getConnection().prepareStatement(query);
+            ps.setString(1, doctor.getName());
+            ps.setString(2, doctor.getLastname());
+            ps.setString(3, doctor.getDni());
+            ps.setDouble(4, doctor.getSalary());
+            ps.setString(5, doctor.getSpeciality());
+            ps.setInt(6, doctor.getId());
+            rs = ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rs;
     }
 
     @Override
     public void delete(int id) {
-
+        if (doctorExists(id)) {
+            String query = "delete from doctors where id=?";
+            PreparedStatement ps;
+            int rs = 0;
+            try {
+                ps = DatabaseConnection.getInstance().getConnection().prepareStatement(query);
+                ps.setInt(1, id);
+                rs = ps.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
