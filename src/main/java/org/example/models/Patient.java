@@ -20,6 +20,17 @@ public class Patient {
         this.disease = disease;
     }
 
+    public Patient(int id, String name, String lastname, String dni, int age, String phone, String disease, Doctor doctor) {
+        this.id = id;
+        this.name = name;
+        this.lastname = lastname;
+        this.dni = dni;
+        this.age = age;
+        this.phone = phone;
+        this.disease = disease;
+        this.doctor = doctor;
+    }
+
     public int getId() {
         return id;
     }

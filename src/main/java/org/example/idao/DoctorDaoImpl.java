@@ -2,6 +2,7 @@ package org.example.idao;
 
 import org.example.dao.DoctorDao;
 import org.example.models.Doctor;
+import org.example.models.Patient;
 import org.example.utils.DatabaseConnection;
 
 import java.sql.PreparedStatement;
@@ -11,14 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DoctorDaoImpl implements DoctorDao {
-    PatientDaoImpl patientDao;
-
-    public DoctorDaoImpl(PatientDaoImpl patientDao) {
-        this.patientDao = patientDao;
-    }
-
     public DoctorDaoImpl() {
-
     }
 
     @Override
@@ -137,7 +131,21 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public Doctor getDoctorByPatientId(int patient_id) {
-        return patientDao.getPatient(patient_id).getDoctor();
+        String query = "select doctor_id from patients where id=?";
+        PreparedStatement ps = null;
+        Patient patient = null;
+        try {
+            ps = DatabaseConnection.getInstance().getConnection().prepareStatement(query);
+            ps.setInt(1, patient_id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int doctor_id = rs.getInt("doctor_id");
+                return getDoctor(doctor_id);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private boolean doctorExists(int id) {

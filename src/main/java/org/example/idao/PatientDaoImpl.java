@@ -18,7 +18,10 @@ public class PatientDaoImpl implements PatientDao {
         PreparedStatement ps;
         int rs = 0;
         try {
+            Doctor doctor = patient.getDoctor();
+
             ps = DatabaseConnection.getInstance().getConnection().prepareStatement(query);
+
             ps.setInt(1, patient.getId());
             ps.setString(2, patient.getName());
             ps.setString(3, patient.getLastname());
@@ -26,7 +29,12 @@ public class PatientDaoImpl implements PatientDao {
             ps.setInt(5, patient.getAge());
             ps.setString(6, patient.getPhone());
             ps.setString(7, patient.getDisease());
-            ps.setInt(8, -1);
+            if (doctor != null) {
+                ps.setInt(8, doctor.getId());
+            } else {
+                ps.setNull(8, java.sql.Types.NULL);
+            }
+
             rs = ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -57,7 +65,12 @@ public class PatientDaoImpl implements PatientDao {
 
     @Override
     public Patient getPatient(int id) {
-        String query = "select * from patients where id=?";
+        String query = "SELECT p.id, p.name, p.lastname, p.dni, p.age, p.phone, p.disease, p.doctor_id, " +
+                "d.name as d_name, d.lastname as d_lastname, d.dni as d_dni, d.salary as d_salary, d.speciality as d_speciality " +
+                "FROM patients p " +
+                "LEFT JOIN doctors d ON p.doctor_id = d.id " +
+                "WHERE p.id = ?";
+
         PreparedStatement ps = null;
         Patient patient = null;
         try {
@@ -65,6 +78,19 @@ public class PatientDaoImpl implements PatientDao {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
+                Doctor doctor = null;
+                int doctor_id = rs.getInt("doctor_id");
+                if (doctor_id == -1) {
+                    doctor = new Doctor(
+                            doctor_id,
+                            rs.getString("d_name"),
+                            rs.getString("d_lastname"),
+                            rs.getString("d_dni"),
+                            rs.getInt("d_salary"),
+                            rs.getString("d_speciality")
+                    );
+                }
+
                 patient = new Patient(
                         rs.getInt("id"),
                         rs.getString("name"),
@@ -72,7 +98,8 @@ public class PatientDaoImpl implements PatientDao {
                         rs.getString("dni"),
                         rs.getInt("age"),
                         rs.getString("phone"),
-                        rs.getString("disease")
+                        rs.getString("disease"),
+                        doctor
                 );
             }
         } catch (SQLException e) {
@@ -117,7 +144,6 @@ public class PatientDaoImpl implements PatientDao {
             int rs = 0;
             try {
                 Doctor doctor = patient.getDoctor();
-                int doctor_id = (doctor == null) ? -1 : doctor.getId();
 
                 ps = DatabaseConnection.getInstance().getConnection().prepareStatement(query);
                 ps.setString(1, patient.getName());
@@ -126,7 +152,11 @@ public class PatientDaoImpl implements PatientDao {
                 ps.setInt(4, patient.getAge());
                 ps.setString(5, patient.getPhone());
                 ps.setString(6, patient.getDisease());
-                ps.setInt(7, doctor_id);
+                if (doctor != null) {
+                    ps.setInt(7, doctor.getId());
+                } else {
+                    ps.setNull(7, java.sql.Types.NULL);
+                }
                 ps.setInt(8, patient.getId());
 
                 rs = ps.executeUpdate();

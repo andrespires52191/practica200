@@ -1,54 +1,95 @@
 package org.example.idao;
 
 import org.example.models.Doctor;
-import org.example.utils.DatabaseConnection;
-import org.junit.jupiter.api.BeforeEach;
+import org.example.models.Patient;
 import org.junit.jupiter.api.Test;
-
-import java.sql.Connection;
-import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class DoctorDaoImplTest {
-    Connection connection;
-
-    @BeforeEach
-    void setUp() {
-        try {
-            Connection connection = DatabaseConnection.getInstance().getConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Test
     void prueba_conjunta() {
-        PatientDaoImpl patientDao = new PatientDaoImpl();
-        DoctorDaoImpl doctorDao = new DoctorDaoImpl(patientDao);
+        DoctorDaoImpl doctorDao = new DoctorDaoImpl();
 
         Doctor doctor;
         int id_prueba = 100;
 
-        // crear
-        doctor = new Doctor(id_prueba, "name", "lastname", "din", 1000, "speciality");
-        assert doctorDao.add(doctor) == 1;
+        // borrar en caso de fallo anterior
+        //try {
+        //    doctorDao.delete(id_prueba);
+        //} catch (Exception ignored) {
+        //}
 
-        // comprobar creacion
-        doctor = doctorDao.getDoctor(id_prueba);
-        assert doctor.getSalary() == 1000;
+        try {
+            // crear
+            doctor = new Doctor(id_prueba, "name", "lastname", "din", 1000, "speciality");
+            assert doctorDao.add(doctor) == 1;
 
-        // actualizar
-        doctor = new Doctor(id_prueba, "name", "lastname", "din", 2000, "speciality");
-        assert doctorDao.update(doctor);
+            // comprobar creacion
+            doctor = doctorDao.getDoctor(id_prueba);
+            assert doctor.getSalary() == 1000;
 
-        // comprobar actualización
-        doctor = doctorDao.getDoctor(id_prueba);
-        assert doctor.getSalary() == 2000;
+            // actualizar
+            doctor = new Doctor(id_prueba, "name", "lastname", "din", 2000, "speciality");
+            assert doctorDao.update(doctor);
 
-        // borrar e intentar borrar de nuevo
-        assertDoesNotThrow(() -> doctorDao.delete(id_prueba));
-        assertThrows(IllegalArgumentException.class, () -> doctorDao.delete(id_prueba));
+            // comprobar actualización
+            doctor = doctorDao.getDoctor(id_prueba);
+            assert doctor.getSalary() == 2000;
+
+            // borrar e intentar borrar de nuevo
+            assertDoesNotThrow(() -> doctorDao.delete(id_prueba));
+            assertThrows(IllegalArgumentException.class, () -> doctorDao.delete(id_prueba));
+        } finally {
+            // limpieza
+            try {
+                doctorDao.delete(id_prueba);
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
+
+    @Test
+    void prueba_getDoctorByPatientId() {
+        PatientDaoImpl patientDao = new PatientDaoImpl();
+        DoctorDaoImpl doctorDao = new DoctorDaoImpl();
+
+        // datos de prueba
+        Doctor doctor = new Doctor(200, "name", "lastname", "dni", 1000, "speciality");
+        Patient patient = new Patient(200, "name", "lastname", "dni", 30, "phone", "disease", doctor);
+
+        // borrar en caso de fallo anterior
+        //try {
+        //    patientDao.delete(patient.getId());
+        //} catch (Exception e) {
+        //    System.out.println("Error: " + e.getMessage());
+        //}
+        //try {
+        //    doctorDao.delete(doctor.getId());
+        //} catch (Exception e) {
+        //    System.out.println("Error: " + e.getMessage());
+        //}
+
+        try {
+            doctorDao.add(doctor);
+            patientDao.add(patient);
+
+            // comprobar resultado consulta
+            assert doctorDao.getDoctorByPatientId(patient.getId()).getId() == doctor.getId();
+        } finally {
+            // limpieza
+            try {
+                patientDao.delete(patient.getId());
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+            try {
+                doctorDao.delete(doctor.getId());
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
     }
 }

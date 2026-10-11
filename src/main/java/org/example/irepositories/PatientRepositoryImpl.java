@@ -11,7 +11,7 @@ public class PatientRepositoryImpl implements PatientRepository {
 
     public PatientRepositoryImpl() {
         patientDao = new PatientDaoImpl();
-        doctorDao = new DoctorDaoImpl(patientDao);
+        doctorDao = new DoctorDaoImpl();
     }
 
     @Override
