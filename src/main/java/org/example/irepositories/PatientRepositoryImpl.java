@@ -37,4 +37,10 @@ public class PatientRepositoryImpl implements PatientRepository {
     public void remove(Patient patient) {
         patientDao.delete(patient.getId());
     }
+
+    @Override
+    public boolean isPatientAttendedByDoctor(int patient_id, int doctor_id) {
+        Patient patient = patientDao.getPatient(patient_id);
+        return doctor_id == patient.getDoctor().getId();
+    }
 }

@@ -10,4 +10,6 @@ public interface PatientRepository {
     void update(Patient patient);
 
     void remove(Patient patient);
+
+    public boolean isPatientAttendedByDoctor(int patient_id, int doctor_id);
 }

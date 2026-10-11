@@ -168,6 +168,32 @@ public class PatientDaoImpl implements PatientDao {
         return false;
     }
 
+    @Override
+    public List<Patient> getPatientsByDoctorId(int doctor_id) {
+        List<Patient> attendedPatients = new ArrayList<>();
+
+        String query = "select id from patients where doctor_id=?";
+
+        PreparedStatement ps = null;
+        Patient patient = null;
+        try {
+            ps = DatabaseConnection.getInstance().getConnection().prepareStatement(query);
+
+            ps.setInt(1, doctor_id);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int patient_id = rs.getInt("id");
+                attendedPatients.add(getPatient(patient_id));
+            }
+
+            return attendedPatients;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private boolean patientExists(int id) {
         return getPatient(id) != null;
     }

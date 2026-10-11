@@ -1,5 +1,8 @@
 package org.example.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Doctor {
     private int id;
     private String name;
@@ -7,6 +10,7 @@ public class Doctor {
     private String dni;
     private double salary;
     private String speciality;
+    final private List<Patient> attendedPatients = new ArrayList<>();
 
     // Constructors, getters, setters and toString
 
@@ -65,5 +69,9 @@ public class Doctor {
 
     public void setSpeciality(String speciality) {
         this.speciality = speciality;
+    }
+
+    public List<Patient> getAttendedPatients() {
+        return attendedPatients;
     }
 }
