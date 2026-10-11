@@ -1,10 +1,10 @@
-package org.example.irepositories;
+package org.example.repositories;
 
-import org.example.idao.DoctorDaoImpl;
-import org.example.idao.PatientDaoImpl;
+import org.example.dao.DoctorDaoImpl;
+import org.example.dao.PatientDaoImpl;
+import org.example.irepositories.PatientRepository;
 import org.example.models.Doctor;
 import org.example.models.Patient;
-import org.example.repositories.PatientRepository;
 
 public class PatientRepositoryImpl implements PatientRepository {
     private PatientDaoImpl patientDao;

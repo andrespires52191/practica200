@@ -1,4 +1,4 @@
-package org.example.idao;
+package org.example.dao;
 
 import org.example.models.Doctor;
 import org.example.models.Patient;

@@ -1,6 +1,6 @@
-package org.example.idao;
+package org.example.dao;
 
-import org.example.dao.DoctorDao;
+import org.example.idao.DoctorDao;
 import org.example.models.Doctor;
 import org.example.models.Patient;
 import org.example.utils.DatabaseConnection;

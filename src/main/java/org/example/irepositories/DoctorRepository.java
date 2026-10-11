@@ -1,4 +1,4 @@
-package org.example.repositories;
+package org.example.irepositories;
 
 import org.example.models.Doctor;
 

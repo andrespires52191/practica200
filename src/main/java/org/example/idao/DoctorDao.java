@@ -1,4 +1,4 @@
-package org.example.dao;
+package org.example.idao;
 
 import org.example.models.Doctor;
 
