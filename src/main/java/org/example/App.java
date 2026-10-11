@@ -1,28 +1,16 @@
 package org.example;
 
-import org.example.utils.DatabaseConnection;
-
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 public class App {
     public static void main(String[] args) {
         // Iniciar Xampp automáticamente
         //xampp_start();
 
-        try {
-            DatabaseConnection db = DatabaseConnection.getInstance();
-            Connection connection = db.getConnection();
-            System.out.println("Programa iniciado.");
-        } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-
         // Cerrar Xampp automáticamente
         //xampp_stop();
 
-        System.out.println("Programa terminado.");
+        System.out.println("Los tests deben lanzarse con JUnit");
     }
 
     private static void xampp_start() {
