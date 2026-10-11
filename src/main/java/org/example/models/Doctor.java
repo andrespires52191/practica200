@@ -7,7 +7,8 @@ public class Doctor {
     private String dni;
     private double salary;
     private String speciality;
-// Constructors, getters, setters and toString
+
+    // Constructors, getters, setters and toString
 
     public Doctor(int id, String name, String lastname, String dni, double salary, String speciality) {
         this.id = id;

@@ -13,17 +13,17 @@ import java.util.List;
 public class DoctorDaoImpl implements DoctorDao {
     @Override
     public int add(Doctor doctor) {
-        String query = "insert doctors id=?, name=?, lastname=?, dni=?, salary=?, speciality=?";
+        String query = "INSERT INTO doctors (id, name, lastname, dni, salary, speciality) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement ps;
         int rs = 0;
         try {
             ps = DatabaseConnection.getInstance().getConnection().prepareStatement(query);
-            ps.setString(1, doctor.getName());
-            ps.setString(2, doctor.getLastname());
-            ps.setString(3, doctor.getDni());
-            ps.setDouble(4, doctor.getSalary());
-            ps.setString(5, doctor.getSpeciality());
-            ps.setInt(6, doctor.getId());
+            ps.setInt(1, doctor.getId());
+            ps.setString(2, doctor.getName());
+            ps.setString(3, doctor.getLastname());
+            ps.setString(4, doctor.getDni());
+            ps.setDouble(5, doctor.getSalary());
+            ps.setString(6, doctor.getSpeciality());
             rs = ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -32,11 +32,11 @@ public class DoctorDaoImpl implements DoctorDao {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws IllegalArgumentException {
+        int rs = 0;
         if (doctorExists(id)) {
             String query = "delete from doctors where id=?";
             PreparedStatement ps;
-            int rs = 0;
             try {
                 ps = DatabaseConnection.getInstance().getConnection().prepareStatement(query);
                 ps.setInt(1, id);
@@ -44,6 +44,11 @@ public class DoctorDaoImpl implements DoctorDao {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+
+        // Para no modificar la interface, pero hacer la comprobación en JUnit.
+        if (rs <= 0) {
+            throw new IllegalArgumentException("No se ha podido borrar");
         }
     }
 
