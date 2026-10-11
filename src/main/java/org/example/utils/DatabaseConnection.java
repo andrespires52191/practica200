@@ -10,11 +10,12 @@ public class DatabaseConnection {
 
     private DatabaseConnection() throws SQLException {
         try {
-//            String driver = "org.mariadb.jdbc.Driver";
-            String driver = "com.mysql.cj.jdbc.Driver";
+            String driver = "org.mariadb.jdbc.Driver";
+            //String driver = "com.mysql.cj.jdbc.Driver";
             Class.forName(driver);
-//            String url = "jdbc:mariadb://localhost:33060/practica200";
-            String url = "jdbc:mysql://localhost/practica200";
+            //String url = "jdbc:mariadb://localhost:33060/practica200";
+            //String url = "jdbc:mysql://localhost/practica200";
+            String url = "jdbc:mariadb://localhost/practica200";
             String user = "root";
             String password = ""; // "12345Abcde";
 

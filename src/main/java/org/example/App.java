@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class App {
     public static void main(String[] args) {
-        // Cerrar xampp automaticamente
+        // Iniciar Xampp automáticamente
         //xampp_start();
 
         try {
@@ -19,7 +19,7 @@ public class App {
             System.out.println("Error: " + e.getMessage());
         }
 
-        // Cerrar xampp automaticamente
+        // Cerrar Xampp automáticamente
         //xampp_stop();
 
         System.out.println("Programa terminado.");
@@ -27,7 +27,7 @@ public class App {
 
     private static void xampp_start() {
         try {
-            System.out.println("Lanzando xampp");
+            System.out.println("Iniciando xampp");
             ProcessBuilder xampp_start = new ProcessBuilder("C:\\xampp\\xampp_start.exe");
             xampp_start.start().waitFor();
             System.out.println("Xampp iniciado");

@@ -5,11 +5,11 @@ import org.example.utils.DatabaseConnection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class DoctorDaoImplTest {
     Connection connection;
@@ -25,7 +25,8 @@ class DoctorDaoImplTest {
 
     @Test
     void prueba_conjunta() {
-        DoctorDaoImpl doctorDao = new DoctorDaoImpl();
+        PatientDaoImpl patientDao = new PatientDaoImpl();
+        DoctorDaoImpl doctorDao = new DoctorDaoImpl(patientDao);
 
         Doctor doctor;
         int id_prueba = 100;

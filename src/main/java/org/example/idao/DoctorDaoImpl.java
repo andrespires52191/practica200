@@ -11,6 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DoctorDaoImpl implements DoctorDao {
+    PatientDaoImpl patientDao;
+
+    public DoctorDaoImpl(PatientDaoImpl patientDao) {
+        this.patientDao = patientDao;
+    }
+
+    public DoctorDaoImpl() {
+
+    }
+
     @Override
     public int add(Doctor doctor) {
         String query = "INSERT INTO doctors (id, name, lastname, dni, salary, speciality) VALUES (?, ?, ?, ?, ?, ?)";
@@ -62,7 +72,8 @@ public class DoctorDaoImpl implements DoctorDao {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                doctor = new Doctor(rs.getInt("id"),
+                doctor = new Doctor(
+                        rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("lastname"),
                         rs.getString("dni"),
@@ -86,7 +97,8 @@ public class DoctorDaoImpl implements DoctorDao {
             ps = DatabaseConnection.getInstance().getConnection().prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                doctor = new Doctor(rs.getInt("id"),
+                doctor = new Doctor(
+                        rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("lastname"),
                         rs.getString("dni"),
@@ -125,7 +137,7 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public Doctor getDoctorByPatientId(int patient_id) {
-        return null;
+        return patientDao.getPatient(patient_id).getDoctor();
     }
 
     private boolean doctorExists(int id) {
