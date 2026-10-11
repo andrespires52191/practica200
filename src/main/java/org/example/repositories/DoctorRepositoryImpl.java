@@ -15,8 +15,11 @@ public class DoctorRepositoryImpl implements DoctorRepository {
     }
 
     @Override
-    public Doctor getDoctor(int id) {
-        return doctorDao.getDoctor(id);
+    public Doctor getDoctor(int doctor_id) {
+        Doctor doctor = doctorDao.getDoctor(doctor_id);
+        doctor.getAttendedPatients().addAll(
+                patientDao.getPatientsByDoctorId(doctor_id));
+        return doctor;
     }
 
     @Override
