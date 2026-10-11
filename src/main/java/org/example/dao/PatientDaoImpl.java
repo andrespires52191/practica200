@@ -80,7 +80,7 @@ public class PatientDaoImpl implements PatientDao {
             while (rs.next()) {
                 Doctor doctor = null;
                 int doctor_id = rs.getInt("doctor_id");
-                if (doctor_id == -1) {
+                if (doctor_id > 0) {
                     doctor = new Doctor(
                             doctor_id,
                             rs.getString("d_name"),

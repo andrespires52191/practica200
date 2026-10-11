@@ -41,6 +41,10 @@ public class PatientRepositoryImpl implements PatientRepository {
     @Override
     public boolean isPatientAttendedByDoctor(int patient_id, int doctor_id) {
         Patient patient = patientDao.getPatient(patient_id);
-        return doctor_id == patient.getDoctor().getId();
+        Doctor doctor = patient.getDoctor();
+        if (doctor == null) {
+            return false;
+        }
+        return doctor_id == doctor.getId();
     }
 }
